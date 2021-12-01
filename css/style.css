@@ -1,0 +1,13 @@
+*{
+    font-family: Montserrat;
+}
+
+body {
+    margin: 0;
+}
+.shadow {
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+}
+.fw-light {
+    font-weight: lighter;
+}

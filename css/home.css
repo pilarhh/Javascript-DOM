@@ -1,0 +1,51 @@
+.main-wrapper {
+    display: flex;
+    height: 100vh;
+}
+.body-left {
+    display: flex;
+    flex-direction: column;
+    flex: 70%;
+    height: 100%;
+}
+.body-right {
+    display: flex;
+    flex-direction: column;
+    flex: 30%;
+    height: 100%;
+    text-align: center;
+}
+.navbar-left {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    background-color: #fff;
+    padding: 15px;
+}
+.navbar-right {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    padding: 15px;
+}
+.cart {
+    flex: 90%;
+}
+.menu {
+    flex: 90%;
+    display: flex;
+}
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    margin-top: 10px;
+    line-height: 60px;
+}
+.cart-menu {
+    flex: 90%;
+    display: flex;
+    background-color: crimson;
+}
+
