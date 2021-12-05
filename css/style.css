@@ -11,3 +11,6 @@ body {
 .fw-light {
     font-weight: lighter;
 }
+.fw-bold {
+    font-weight: bold;
+}

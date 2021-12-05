@@ -27,8 +27,8 @@
                     <div><img src="./img/clipboard.svg" alt=""></div>
                     <div><img src="./img/add.svg" alt=""></div>
                 </aside>
-                <section class="cart-menu">
-                    ffff
+                <section id="menu-list" class="cart-menu">
+                    
                 </section>
             </main>
         </section>
@@ -37,23 +37,152 @@
                 <div class="title">
                     <h4>Cart</h4>
                 </div>
-                <img src="./img/bagde.svg" alt="">
+                <div id="number-cart" class="number-icon">
+                    0
+                </div>
             </header>
-            <main class="cart">
+            <main id="filled-cart" class="cart">
                 <img src="./img/food-and-restaurant.svg" alt="">
                 <h3>Your cart is empty</h3>
                 <p class="fw-light">Please add some items from the menu</p>
             </main>
+            <button class="btn-modal" id="modalButton">Checkout</button>
+            <section id="total-cart">
+
+            </section>
+            
         </section>
     </main>
 
-    
-    
-    
-    
+    <!-- modal -->
+    <main id ="checkoutModal" class="checkout">
+        <div class="modal-content">
+            <h4>Checkout</h4>
+            <p>Cashier: Pevita Pearce</p>
+            <p>Payment: Cash</p>
+            <button class="btn-cancel">Print</button>
+            <p>or</p>
+            <button class="btn-checkout">Send Email</button>
+        </div>
+    </main>
+
+
     <script type="text/javascript">
+        // fetch menu data from API
+        fetch('https://61a90c6e33e9df0017ea3c8b.mockapi.io/menu-list')
+                .then((response) => {
+                    return response.json();
+                })
+                .then((json)=>{
+                    products = json
+                    json.forEach((item)=> {
+                        document.getElementById('menu-list').innerHTML +=
+                        `<div class="menu-grid">
+                        <img src= ${item.image} onclick="addToCart(${item.id})">
+                        <p>${item.name}<p>
+                        <p class="fw-bold">Rp${item.price}</p>
+                        </div>`
+                    })
+                })
 
+            // cart to array
+            let cart = [];
+            
+            // add items to cart
+            function addToCart(id) {
+                // to check product already exist or not
+                if(cart.some((product)=> product.id == id)){
+                    alert('product is already in the cart')
+                }else{
+                const product = products.find((item)=> item.id == id);
+                cart.push({
+                    ...product,
+                    numberOfUnits: 1,
+                });
+                }
+                document.getElementById('filled-cart').innerHTML = "";
+                cart.forEach((product)=>{
+                    document.getElementById('filled-cart').innerHTML +=
+                    `<div class="picked-item">
+                        <img src="${product.image}" alt="" onclick="removeItem(${product.id})">
+                        <div class="input-name">
+                            <p class="fw-bold">${product.name}</p>
+                            <div class="input">
+                                <div class="btn minus" onclick="changeNumber('minus', ${product.id})">-</div>
+                                <div class="number">${product.numberOfUnits}</div>
+                                <div class="btn plus onclick="changeNumber('plus', ${product.id})">+</div>           
+                            </div>
+                        </div>
+                        <p>Rp${product.price}</p>
+                    </div>`
+                })
+                updateCart()
+            }
+            
+            // update cart
+            function updateCart() {
+                subTotalItems();
+            }
 
+            // to count total items
+            function subTotalItems(){
+                let totalPrice = 0, totalItems = 0;
+
+                cart.forEach((product)=>{
+                    totalPrice += product.numberOfUnits * product.price
+                    totalItems += product.numberOfUnits
+                })
+                document.getElementById('total-cart').innerHTML = 
+                `<div class="total-cart">
+                        <h3>Total: ${totalPrice}*</h3>
+                        <p>*Belum termasuk ppn</p>
+                        <button class="btn-checkout">Checkout</button>
+                        <button class="btn-cancel">Cancel</button>
+                </div>`;
+                document.getElementById('number-cart').innerHTML = totalItems;
+            }
+
+            // remove item from cart 
+            function removeItem(id) {
+                cart = cart.filter((product)=> product.id != id)
+
+                updateCart()
+            }
+
+            // plus minus input
+            function changeNumber(action, id) {
+                cart = cart.map((product) => {
+                    let oldNumber = product.numberOfUnits;
+
+                    if (product.id === id) {
+                        if (action === "minus") {
+                            oldNumber--;
+                        } else if (action === "plus") {
+                            oldNumber++;
+                        }
+                    }
+                    return {
+                    ...product,
+                    oldNumber,
+                    };
+                });
+
+                updateCart();
+                }
+            
+            // modal for checkout page
+            var modal = document.getElementById('checkoutModal')
+            var btn = document.getElementById('modalButton')
+            
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
     </script>
 </body>
 </html>
